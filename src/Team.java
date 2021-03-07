@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team<T extends Player> {//OUR WAY OF RESTRICTING TYPE OF CLASS THAT WE CAN USE IN A ANOTHER CLASS
+public class Team<T extends Player> implements Comparable<Team<T>>{//how to restrict comparable interfce to compare same sport teams
     private  final String name;
     int played;
     int tied;
@@ -10,6 +10,16 @@ public class Team<T extends Player> {//OUR WAY OF RESTRICTING TYPE OF CLASS THAT
 
     public Team(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(Team<T> o) {//how to implement parameterizes compareTo with Generics
+        if(this.ranking()>o.ranking()){
+            return 1;
+        }else if(this.ranking()<o.ranking()){
+            return -1;
+        }
+        return 0;
     }
 
     public String getName(){
