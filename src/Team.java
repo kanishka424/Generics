@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team {
+public class Team<T extends Player> {//OUR WAY OF RESTRICTING TYPE OF CLASS THAT WE CAN USE IN A ANOTHER CLASS
     private  final String name;
     int played;
     int tied;
@@ -16,11 +16,11 @@ public class Team {
         return name;
     }
 
-    List<Player> members=new ArrayList<>();
+    List<T> members=new ArrayList<>();
 
-    public Boolean addMembers(Player player){
+    public Boolean addPlayer(T player){
         if(members.contains(player)){
-            System.out.println(player.getName()+" is already on team");
+            System.out.println(player.getName()+" is already on team");//
             return false;
         }else{
             System.out.println(player.getName()+" is added to team "+ this.name);
@@ -38,25 +38,30 @@ public class Team {
 
     }
 
-    public void matchResultRecord(Team opponent,int ourScore,int theirScore){
-        played++;
-        if(ourScore>theirScore){
+    public void matchResult(Team<T> opponent, int ourScore, int theirScore) {
+
+        String message;
+
+        if(ourScore > theirScore) {
             won++;
-        }else if(ourScore==theirScore){
+            message = " beat ";
+        } else if(ourScore == theirScore) {
             tied++;
-        }else if(ourScore<theirScore){
+            message = " drew with ";
+
+        } else {
             lost++;
+            message = " lost to ";
         }
-
-        if(opponent!=null){//intresting code to stop infinity loop
-            opponent.matchResultRecord(null,theirScore,ourScore);
-        };
-
-
+        played++;
+        if(opponent != null) {
+            System.out.println(this.getName() + message + opponent.getName());
+            opponent.matchResult(null, theirScore, ourScore);//intresting way to stop the loop
+        }
     }
 
 
-    public int getNumOfPlayers(){
+    public int numPlayers(){
         return this.members.size();
     }
 
@@ -64,3 +69,11 @@ public class Team {
         return (won*2)+tied;
     }
 }
+
+
+
+//======================NOTE=======================
+//1.Java allows multiple bound types but general rule apply only one class you can extend others must be interfaces
+//here alo specify the clas first
+// e.g-Team<T extend player & Manager & Coach >
+//player is the only class Manager and Coach must be interfaces
